@@ -1,0 +1,11 @@
+# Ghostty config — managed by these dotfiles (stow package: ghostty).
+# Docs: https://ghostty.org/docs/config
+#
+# Replaces the old Ptyxis palette/font gsettings. The font is installed by
+# setup/gnome/terminal.sh (JetBrainsMono Nerd Font).
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 10
+
+# Breathing room around the grid (points).
+window-padding-x = 8
+window-padding-y = 8

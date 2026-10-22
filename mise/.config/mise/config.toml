@@ -1,0 +1,11 @@
+[settings]
+ruby.compile = false
+# Refuse unverified plugins/downloads; lockfile pins versions + checksums so a
+# new release only lands via a deliberate `mise upgrade` / `mise lock --bump`.
+paranoid = true
+lockfile = true
+
+[tools]
+go = "1.27"
+node = "24"
+ruby = "4.0"

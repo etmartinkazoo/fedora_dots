@@ -1,0 +1,5 @@
+# Repo-local gitignore — global patterns live in git/.gitignore
+# (deployed as core.excludesfile, so only repo-specific patterns here)
+
+# Stow metadata
+.stow-local-ignore

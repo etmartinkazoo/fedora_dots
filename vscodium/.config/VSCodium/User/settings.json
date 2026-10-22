@@ -1,0 +1,21 @@
+{
+  "editor.fontSize": 13,
+  "window.zoomLevel": 1,
+  "window.openFilesInNewWindow": "off",
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Default Dark Modern",
+  "workbench.preferredLightColorTheme": "Default Light Modern",
+  "workbench.startupEditor": "none",
+
+  // Vim keys (vscodevim.vim, installed by setup/packages/vscodium.sh).
+  "vim.useSystemClipboard": true,
+
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+
+  // Quiet + private: dnf owns updates; no telemetry or experiments.
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "none",
+  "workbench.enableExperiments": false,
+  "extensions.autoCheckUpdates": true
+}

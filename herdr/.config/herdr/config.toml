@@ -1,0 +1,28 @@
+onboarding = false
+
+[update]
+channel = "stable"
+version_check = false
+manifest_check = false
+
+[keys]
+# ctrl+b (not ctrl+a) so the prefix doesn't shadow readline's Ctrl-A
+# (beginning-of-line) inside a pane.
+prefix = "ctrl+b"
+
+[theme]
+name = "terminal"
+
+[ui]
+# Mouse focuses/scrolls panes. Hold Shift while dragging to bypass the capture
+# and use Ghostty's native text selection.
+mouse_capture = true
+pane_borders = true
+pane_gaps = true
+confirm_close = true
+
+[ui.sound]
+enabled = false
+
+[advanced]
+scrollback_limit_bytes = 52428800

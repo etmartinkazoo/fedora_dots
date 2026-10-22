@@ -1,0 +1,66 @@
+# Global gitignore — git reads ~/.config/git/ignore by default (no core.excludesfile needed)
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+
+# Merge / patch artifacts
+*.orig
+*.rej
+*.bak
+
+# Logs / temp
+*.log
+.cache/
+.direnv/
+
+# Language / project artifacts
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.eggs/
+*.egg-info/
+.next/
+.turbo/
+.coverage
+htmlcov/
+
+**/.claude/settings.local.json
