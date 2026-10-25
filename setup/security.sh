@@ -82,11 +82,11 @@ fi
 # ===========================================================================
 
 # dnf5-automatic (privacy.sh) only applies "security" advisories, and only
-# Fedora's repos publish advisories — Chrome, Docker, Tailscale, VSCodium and
-# the Ghostty COPR would otherwise never update until UPGRADE=1. This timer
-# upgrades only packages from those repos (dependencies may still come from
-# Fedora), nightly in the same window as Flatpak updates. Re-run this module
-# after adding a repo so it is picked up.
+# Fedora's repos publish advisories — Chrome, Docker (when USE_DOCKER=1 has
+# installed it), Tailscale, VSCodium and the Ghostty COPR would otherwise
+# never update until UPGRADE=1. This timer upgrades only packages from those
+# repos (dependencies may still come from Fedora), nightly in the same window
+# as Flatpak updates. Re-run this module after adding a repo so it is picked up.
 log "Scheduling nightly updates for third-party repos"
 mapfile -t third_party < <(
   dnf repolist --enabled --quiet 2>/dev/null | awk 'NR > 1 { print $1 }' |
