@@ -26,10 +26,11 @@ bash "$REPO_ROOT/stow.sh"
 # for what a full provision runs, so there's no leaf list to keep in sync here.
 MODULES=(
   packages.sh      # dnf + flatpaks + vscodium + chrome
-  dev_tools.sh     # mise, docker, third-party tools
+  dev_tools.sh     # mise, rootless podman, third-party tools (Docker: USE_DOCKER=1)
   gnome.sh         # dock, power, appearance, keybindings, terminal, icons, peripherals
   privacy.sh
   security.sh      # firewall, DNS-over-TLS, third-party updates, tailscale, git signing
+  profiles.sh      # ~/Profiles walls + rootless Podman shells (personal/consultancy/brem/lumin)
   chrome.sh        # system policies + 4 profiles (Bitwarden)
   battery.sh
 )

@@ -2,8 +2,27 @@
 # Docker Engine (official Fedora rpm repo) + post-install.
 # https://docs.docker.com/engine/install/fedora/
 # https://docs.docker.com/engine/install/linux-postinstall/
+#
+# Opt-in. Rootless Podman (setup/dev/podman.sh) is the default runtime.
+# Docker Engine runs a rootful daemon, and every member of the docker group
+# can talk to it — that is root-equivalent on the host (mount the filesystem,
+# start privileged containers). Install it only when a tool still needs the
+# Docker API:
+#   USE_DOCKER=1 ./setup/dev/docker.sh
+#
+# This does not remove Podman. It does remove podman-docker when present,
+# because that shim and docker-ce both ship a docker CLI.
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib.sh"
+
+if [ "${USE_DOCKER:-0}" != "1" ]; then
+  log "Docker Engine skipped"
+  echo "  Rootless Podman is the default (setup/dev/podman.sh)."
+  echo "  Set USE_DOCKER=1 to install the rootful Docker Engine and join the docker group."
+  exit 0
+fi
+
+log "Docker Engine opted in (USE_DOCKER=1). The docker group is root-equivalent."
 
 DOCKER_REPO_URL="https://download.docker.com/linux/fedora/docker-ce.repo"
 

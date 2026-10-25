@@ -22,14 +22,20 @@ _CLAUDE_YOLO_SETTINGS='{
     "allowUnsandboxedCommands": false,
     "failIfUnavailable": true,
     "filesystem": {
-      "denyRead": ["~/.ssh", "~/.gnupg", "~/.config/gh", "~/.config/google-chrome", "~/.config/Bitwarden", "~/.aws", "~/.kube", "~/.docker"]
+      "denyRead": ["~/.ssh", "~/.gnupg", "~/.config/gh", "~/.config/google-chrome", "~/.config/Bitwarden", "~/.aws", "~/.kube", "~/.docker", "~/Profiles/personal/.ssh", "~/Profiles/consultancy/.ssh", "~/Profiles/brem/.ssh", "~/Profiles/lumin/.ssh", "~/Profiles/personal/Mail", "~/Profiles/consultancy/Mail", "~/Profiles/brem/Mail", "~/Profiles/lumin/Mail", "~/Profiles/personal/.config/neomutt", "~/Profiles/consultancy/.config/neomutt", "~/Profiles/brem/.config/neomutt", "~/Profiles/lumin/.config/neomutt"]
     }
   },
   "permissions": {
     "deny": [
       "Read(~/.ssh/**)", "Read(~/.gnupg/**)", "Read(~/.config/gh/**)",
       "Read(~/.config/google-chrome/**)", "Read(~/.config/Bitwarden/**)",
-      "Read(~/.aws/**)", "Read(~/.kube/**)", "Read(~/.docker/**)"
+      "Read(~/.aws/**)", "Read(~/.kube/**)", "Read(~/.docker/**)",
+      "Read(~/Profiles/personal/.ssh/**)", "Read(~/Profiles/consultancy/.ssh/**)",
+      "Read(~/Profiles/brem/.ssh/**)", "Read(~/Profiles/lumin/.ssh/**)",
+      "Read(~/Profiles/personal/Mail/**)", "Read(~/Profiles/consultancy/Mail/**)",
+      "Read(~/Profiles/brem/Mail/**)", "Read(~/Profiles/lumin/Mail/**)",
+      "Read(~/Profiles/personal/.config/neomutt/**)", "Read(~/Profiles/consultancy/.config/neomutt/**)",
+      "Read(~/Profiles/brem/.config/neomutt/**)", "Read(~/Profiles/lumin/.config/neomutt/**)"
     ]
   }
 }'

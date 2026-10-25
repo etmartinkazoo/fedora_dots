@@ -24,11 +24,13 @@ ambient distraction. If a privacy measure breaks a productivity service,
 # Standalone module runners
 ./setup/packages.sh             # dnf + flatpaks + vscodium + chrome
 ./setup/gnome.sh                # all GNOME sub-modules
-./setup/dev_tools.sh            # mise + docker + opencode/herdr/claude/tailscale/starship
+./setup/dev_tools.sh            # mise + rootless podman + opencode/herdr/claude/tailscale/starship
 SKIP_TOOLS="tailscale" ./setup/dev_tools.sh   # skip listed third-party installers
+USE_DOCKER=1 ./setup/dev_tools.sh # also install rootful Docker Engine (docker group is root-equivalent)
 
 # Single modules
 ./setup/dev/vocalinux.sh        # offline voice dictation (opt-in; not in bootstrap)
+./setup/profiles.sh             # ~/Profiles walls + rootless Podman shells
 ./setup/chrome.sh               # Chrome policies + profiles (Chrome must be closed)
 
 # Full dnf upgrade
@@ -37,7 +39,7 @@ UPGRADE=1 ./setup/packages/dnf.sh
 
 ## Sudo in bootstrap
 
-`bootstrap.sh` delegates to the grouped runners (`packages.sh`, `dev_tools.sh`, `gnome.sh`) plus the standalone privacy/security/chrome/battery modules, so the leaf lists live in exactly one place each. A full provision is long and late modules (e.g. `battery.sh`) still need sudo, so a background loop (`SUDO_KEEPER`) refreshes the timestamp every 4 minutes and `sudo -v` runs before each top-level module. Modules called via `bash "$path"` subprocesses inherit cached credentials.
+`bootstrap.sh` delegates to the grouped runners (`packages.sh`, `dev_tools.sh`, `gnome.sh`) plus the standalone privacy/security/profiles/chrome/battery modules, so the leaf lists live in exactly one place each. A full provision is long and late modules (e.g. `battery.sh`) still need sudo, so a background loop (`SUDO_KEEPER`) refreshes the timestamp every 4 minutes and `sudo -v` runs before each top-level module. Modules called via `bash "$path"` subprocesses inherit cached credentials.
 
 If a module fails early from `set -euo pipefail`, bootstrap aborts — no partial state recovery.
 
@@ -49,7 +51,9 @@ If a module fails early from `set -euo pipefail`, bootstrap aborts — no partia
 - **Google Chrome**: Fedora Workstation ships `/etc/yum.repos.d/google-chrome.repo` disabled (`fedora-workstation-repositories`); `packages/chrome.sh` enables it with `dnf config-manager setopt` (override file, packaged repo untouched) or writes it if absent. Checked even when Chrome is installed, since a disabled repo means no updates. x86_64 only.
 - **Chrome hardening**: `setup/chrome.sh` writes mandatory policies to `/etc/opt/chrome/policies/managed/dotfiles-chrome{,-extensions}.json` (sudo) and adds the four profiles (Personal/Consultancy/Brem/Lumin) to `~/.config/google-chrome/Local State` only if no profile with that name exists — existing profiles are never renamed or moved (one-time backup: `Local State.pre-dotfiles`). Refuses to add profiles while Chrome is open; policy/launcher checks run regardless. Bitwarden is `force_installed` via `ExtensionSettings`. **One launcher only**: `~/.local/share/applications/google-chrome.desktop` (and the NoDisplay `com.google.Chrome.desktop` the XDG portal opens URLs with) are re-derived each run from `/usr/share/applications` with `LAUNCH_FLAGS` spliced into every `Exec=` line — never hand-edit them, and never add per-profile `.desktop` entries; the profile is picked inside Chrome. Stale `chrome-*.desktop` per-profile launchers are deleted on run. Policies are declarative — edit the script and re-run; don't re-add the deprecated policies listed in its header (Privacy Sandbox toggles, SafeBrowsingExtendedReporting, AutofillAddress/CreditCard, PromotionalTabs). `DnsOverHttpsMode` is intentionally `off` so Chrome uses the system resolver.
 - **Ghostty config**: default terminal; config is the stowed `ghostty` package (`~/.config/ghostty/config`), replacing the old Ptyxis gsettings.
-- **Slack**: Flatpak from Flathub (`packages/flatpaks.sh` adds/unfilters the Flathub remote). Launch command is `flatpak run com.slack.Slack` (see `gnome/keybindings.sh`).
+- **Slack**: Flatpak from Flathub (`packages/flatpaks.sh` adds/unfilters the Flathub remote). Launch command is `flatpak run com.slack.Slack` (see `gnome/keybindings.sh`). Do not grant it all of `$HOME`; confine it with `flatpak-lock-to-profile com.slack.Slack <profile>` after `profiles.sh`.
+- **Profiles**: `setup/profiles.sh` creates `~/Profiles/{personal,consultancy,brem,lumin}` and a rootless Podman container per name (`--userns=keep-id`, only that directory on `/work` with `:Z`, no `--privileged`, no `label=disable`, no docker.sock). Launchers in `~/bin` (`shell-<profile>`, `tmux-<profile>`, `mutt-<profile>`) are on PATH via `path.bash` and are rewritten each run. Neomutt stubs are written only when missing. Chrome profiles stay the browser boundary; these directories are the filesystem boundary. SELinux stays enforcing.
+- **Podman**: default container runtime is rootless Podman (`dev/podman.sh`, Fedora package, subordinate UID/GID ranges). Docker Engine is opt-in (`USE_DOCKER=1`) because the docker group is root-equivalent. Do not install `podman-docker` or enable a Docker-compatible socket for the default path.
 - **Dash to Dock**: Fedora GNOME is vanilla, so `gnome/dock.sh` installs `gnome-shell-extension-dash-to-dock`, appends it to `org.gnome.shell enabled-extensions`, and calls `refresh_schemas` (the inherited schema cache predates the install). Takes effect after re-login.
 - **VSCodium**: `packages/vscodium.sh` writes the upstream repo `/etc/yum.repos.d/vscodium.repo` (`download.vscodium.com/rpms`, metadata + packages GPG-checked) and installs `codium`; extensions (`EXTENSIONS`) come from Open VSX via `codium --install-extension`. Settings are stowed from `vscodium/` into `~/.config/VSCodium/User/`. Third-party repo, so `dnf5-automatic` (security advisories only) won't update it — `dotfiles-thirdparty-update.timer` (`security.sh`) does, nightly.
 - **starship**: installed per-user to `~/.local/bin` (no sudo) by `dev/tools.sh`; the bash prompt in `bash/.config/bashrc.d/prompt.bash` initializes it and falls back to the stock Fedora prompt (`/etc/bashrc`) if it is absent.
